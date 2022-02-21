@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS `notes` (
+	`id` INT(8) NOT NULL AUTO_INCREMENT,
+	`title` TEXT(60) NOT NULL,
+	`uploaderId` INT(6) UNSIGNED NOT NULL,
+	`createdAt` TIMESTAMP NOT NULL,
+	PRIMARY KEY (`id`)
+) ENGINE = InnoDB;

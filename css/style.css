@@ -1,0 +1,12 @@
+body {
+    background-color: var(--bs-gray-dark);
+}
+
+.note {
+    background-color: var(--bs-yellow);
+}
+
+.loginForm {
+    background-color: rgba(0, 0, 0, 0.1);
+    color: white;
+}
