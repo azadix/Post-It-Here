@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS `users` (
+	`id` INT(8) NOT NULL AUTO_INCREMENT,
+	`username` TEXT(60) NOT NULL,
+	`hashedPassword` TEXT(255) NOT NULL,
+	`createdAt` TIMESTAMP NOT NULL,
+	PRIMARY KEY (`id`)
+) ENGINE = InnoDB;

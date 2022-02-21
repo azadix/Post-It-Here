@@ -33,12 +33,25 @@
             return $this->connection->query($qr);
         }
         
-        public function createTableIfDoesntExist()
+        public function createNotesTableIfDoesntExist()
         {
             $qr = "CREATE TABLE IF NOT EXISTS `notes` (
                     `id` INT(8) NOT NULL AUTO_INCREMENT,
                     `title` TEXT(60) NOT NULL,
                     `uploaderId` INT(6) UNSIGNED NOT NULL,
+                    `createdAt` TIMESTAMP NOT NULL,
+                    PRIMARY KEY (`id`)
+                ) ENGINE = InnoDB;";
+
+            return $this->connection->query($qr);
+        }
+
+        public function createUsersTableIfDoesntExist()
+        {
+            $qr = "CREATE TABLE IF NOT EXISTS `users` (
+                    `id` INT(8) NOT NULL AUTO_INCREMENT,
+                    `username` TEXT(60) NOT NULL,
+                    `hashedPassword` TEXT(255) NOT NULL,
                     `createdAt` TIMESTAMP NOT NULL,
                     PRIMARY KEY (`id`)
                 ) ENGINE = InnoDB;";
@@ -56,20 +69,60 @@
             $this->databaseName = $tempDatabaseName;
         }
 
-        public function addNote()
+        public function addNewUser($username, $password)
         {
-            $title = "elo";
-            $userID = 1;
-
+            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
             $qr = "INSERT INTO 
-                        `notes` (
-                            `title`,
-                            `uploaderId`
+                        `users` (
+                            `username`,
+                            `hashedPassword`
                         )
                     VALUES (
-                        '{$title}',
-                        '{$userID}'
+                        '{$username}',
+                        '{$hashedPassword}'
                     );";
+            
             return $this->connection->query($qr);
+        }
+
+        public function checkIfRegistered($username, $password)
+        {
+            $isPasswordMatching = false;
+            $qr = "SELECT 
+                        `hashedPassword`
+                    FROM
+                        `users`
+                    WHERE
+                        `username` = '{$username}';";
+            
+            $response = $this->connection->query($qr);
+
+            if ($response->num_rows > 0) {
+                $row = $response->fetch_assoc();
+                $isPasswordMatching = password_verify($password, $row["hashedPassword"]);
+            }
+            return $isPasswordMatching;
+        }
+
+        public function checkIfUsernameAlreadyExists($username)
+        {
+            $isUsernameAlreadyPresent = false;
+            $qr = "SELECT 
+                        `username`
+                    FROM
+                        `users`
+                    WHERE
+                        `username` = '{$username}';";
+            
+            $response = $this->connection->query($qr);
+            var_dump ($response);
+
+            if ($response->num_rows > 0) {
+                $row = $response->fetch_assoc();
+                if ($username ==  $row["username"]) {
+                    $isUsernameAlreadyPresent = true;
+                }
+            }
+            return $isUsernameAlreadyPresent;
         }
     }

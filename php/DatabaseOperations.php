@@ -10,8 +10,9 @@
         $connection = new Database;
         $connection->createDatabaseIfDoesntExist();
         $connection->connect($connection->getDatabaseName());
-        $connection->createTableIfDoesntExist();
-
+        $connection->createNotesTableIfDoesntExist();
+        $connection->createUsersTableIfDoesntExist();
+        
         //Check if connection was made
         if (!$connection) {
             die("Error: connection to database wasn't established");
@@ -20,4 +21,4 @@
     }
 
     $connection = connectToMYSQL();
-    //$connection->addNote();
+    

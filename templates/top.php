@@ -1,5 +1,10 @@
 <?php
     $activePage = basename($_SERVER['PHP_SELF'], ".php");
+    $isLoggedIn = false;
+    if (isset($_COOKIE['isLoggedIn']) == true) {
+        $isLoggedIn = true;
+    }
+    
 ?>
 
 <!DOCTYPE html>
@@ -33,7 +38,10 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <div class="navbar-nav ms-auto">
                     <a class="nav-link <?= ($activePage == 'index') ? 'active':''; ?>" href="index.php">Notes</a>
-                    <a class="nav-link <?= ($activePage == 'login') ? 'active':''; ?>" href="login.php">Log in</a>
+                    <a class="nav-link <?= ($activePage == 'login') ? 'active':''; ?>"
+                        href="<?= ($isLoggedIn == true) ? 'logout.php':'login.php'; ?>">
+                        <?= ($isLoggedIn == true) ? 'Log out':'Log in'; ?>
+                    </a>
                 </div>
             </div>
         </div>

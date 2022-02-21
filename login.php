@@ -2,13 +2,17 @@
     require "php/DatabaseOperations.php";
     require "templates/top.php";
 
-
-    if (isset($_POST['login']) && isset($_POST['password'])) {
-        $userLogin = $_POST['login'];
+    if (isset($_POST['username']) && isset($_POST['password'])) {
+        $userLogin = $_POST['username'];
         $userPassword =  $_POST['password'];
-        
+        if ($connection->checkIfRegistered($userLogin, $userPassword)) {
+            $expiryDate = time() + 24*60*60*1000;
+            setcookie("isLoggedIn", true, $expiryDate);
+            header ("Location: index.php");
+        } else {
+            echo "<div class='text-danger'>Username or Password is incorrect!</div>";
+        }
     }
-
 ?>
 
 <main role="main" clas="container">
@@ -19,8 +23,8 @@
         <div class="card-body">
             <form action="login.php" method="POST">
                 <div class="form-group p-2">
-                    <label for="login">Login:</label>
-                    <input type="text" class="form-control" id="login" name="login" placeholder="Username"></input>
+                    <label for="ssername">Username:</label>
+                    <input type="text" class="form-control" id="username" name="username" placeholder="Username"></input>
                 </div>
                 <div class="form-group p-2">
                     <label for="password">Password:</label>
