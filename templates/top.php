@@ -1,10 +1,10 @@
 <?php
     $activePage = basename($_SERVER['PHP_SELF'], ".php");
     $isLoggedIn = false;
+    
     if (isset($_COOKIE['isLoggedIn']) == true) {
         $isLoggedIn = true;
-    }
-    
+    } 
 ?>
 
 <!DOCTYPE html>

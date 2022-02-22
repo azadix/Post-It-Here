@@ -3,11 +3,12 @@ body {
     color: white;
 }
 
-.note {
+.bg-yellow {
     background-color: var(--bs-yellow);
-    color: black;
 }
 
 .loginForm {
     background-color: rgba(0, 0, 0, 0.1);
 }
+
+.note {}

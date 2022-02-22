@@ -5,6 +5,7 @@
     if (isset($_POST['username']) && isset($_POST['password'])) {
         $userLogin = $_POST['username'];
         $userPassword =  $_POST['password'];
+        
         if ($connection->checkIfRegistered($userLogin, $userPassword)) {
             $expiryDate = time() + 24*60*60*1000;
             setcookie("isLoggedIn", true, $expiryDate);

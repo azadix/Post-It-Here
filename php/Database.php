@@ -40,7 +40,8 @@
                     `title` TEXT(60) NOT NULL,
                     `uploaderId` INT(6) UNSIGNED NOT NULL,
                     `createdAt` TIMESTAMP NOT NULL,
-                    PRIMARY KEY (`id`)
+                    `content` VARCHAR(255) NULL
+                    PRIMARY KEY (`id`
                 ) ENGINE = InnoDB;";
 
             return $this->connection->query($qr);
@@ -115,7 +116,6 @@
                         `username` = '{$username}';";
             
             $response = $this->connection->query($qr);
-            var_dump ($response);
 
             if ($response->num_rows > 0) {
                 $row = $response->fetch_assoc();
