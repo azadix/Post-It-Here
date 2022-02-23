@@ -166,7 +166,6 @@
                             `notes`
                         WHERE
                             `id` = {$noteId};";
-            var_dump($qr);
             return $this->connection->query($qr);
         }
 
