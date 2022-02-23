@@ -4,5 +4,5 @@ CREATE TABLE IF NOT EXISTS `notes` (
 	`uploaderId` INT(6) UNSIGNED NOT NULL,
 	`createdAt` TIMESTAMP NOT NULL,
 	`content` VARCHAR(255) NULL
-	PRIMARY KEY (`id`
+	PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;

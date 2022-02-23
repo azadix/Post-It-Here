@@ -9,6 +9,7 @@
         if ($connection->checkIfRegistered($userLogin, $userPassword)) {
             $expiryDate = time() + 24*60*60*1000;
             setcookie("isLoggedIn", true, $expiryDate);
+            setcookie("username", $userLogin, $expiryDate);
             header ("Location: index.php");
         } else {
             echo "<div class='text-danger'>Username or Password is incorrect!</div>";
@@ -17,14 +18,14 @@
 ?>
 
 <main role="main" clas="container">
-    <div class="card loginForm">
+    <div class="card bg-black-alpha">
         <div class="card-header">
             <h4>Log in</h4>
         </div>
         <div class="card-body">
             <form action="login.php" method="POST">
                 <div class="form-group p-2">
-                    <label for="ssername">Username:</label>
+                    <label for="username">Username:</label>
                     <input type="text" class="form-control" id="username" name="username" placeholder="Username"></input>
                 </div>
                 <div class="form-group p-2">

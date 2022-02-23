@@ -7,8 +7,19 @@ body {
     background-color: var(--bs-yellow);
 }
 
-.loginForm {
+.bg-black-alpha {
     background-color: rgba(0, 0, 0, 0.1);
 }
 
-.note {}
+.note {
+    height: max-content;
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.card-header {
+    padding: 0.5rem;
+}
+
+.btn-close {
+    height: 30px;
+}

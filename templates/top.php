@@ -4,6 +4,7 @@
     
     if (isset($_COOKIE['isLoggedIn']) == true) {
         $isLoggedIn = true;
+        $loggedInUsername = $_COOKIE['username'];
     } 
 ?>
 
@@ -40,7 +41,7 @@
                     <a class="nav-link <?= ($activePage == 'index') ? 'active':''; ?>" href="index.php">Notes</a>
                     <a class="nav-link <?= ($activePage == 'login') ? 'active':''; ?>"
                         href="<?= ($isLoggedIn == true) ? 'logout.php':'login.php'; ?>">
-                        <?= ($isLoggedIn == true) ? 'Log out':'Log in'; ?>
+                        <?= ($isLoggedIn == true) ? 'Log out' :'Log in'; ?>
                     </a>
                 </div>
             </div>

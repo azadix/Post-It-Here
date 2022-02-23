@@ -6,8 +6,11 @@
         private $pass;
         private $databaseName;
         protected $connection;
+
+        private $title;
+        private $content;
         
-        public function __construct($tempHost = "localhost", $tempLogin="admin", $tempPass = "admin")
+        public function __construct ($tempHost = "localhost", $tempLogin="admin", $tempPass = "admin")
         {
             $this->host = $tempHost;
             $this->login = $tempLogin;
@@ -40,8 +43,8 @@
                     `title` TEXT(60) NOT NULL,
                     `uploaderId` INT(6) UNSIGNED NOT NULL,
                     `createdAt` TIMESTAMP NOT NULL,
-                    `content` VARCHAR(255) NULL
-                    PRIMARY KEY (`id`
+                    `content` VARCHAR(255) NULL,
+                    PRIMARY KEY (`id`)
                 ) ENGINE = InnoDB;";
 
             return $this->connection->query($qr);
@@ -104,7 +107,7 @@
             }
             return $isPasswordMatching;
         }
-
+        
         public function checkIfUsernameAlreadyExists($username)
         {
             $isUsernameAlreadyPresent = false;
@@ -124,5 +127,63 @@
                 }
             }
             return $isUsernameAlreadyPresent;
+        }
+
+        public function getUserID($username)
+        {
+            $qr = "SELECT 
+                        `id`
+                    FROM
+                        `users`
+                    WHERE
+                        `username` = '{$username}';";
+            
+            $response = $this->connection->query($qr);
+
+            if ($response->num_rows > 0) {
+                $row = $response->fetch_assoc();
+            }
+            return $row["id"];
+        }
+
+        public function addNote($username)
+        {
+            $qr = "INSERT INTO 
+                            `notes` (
+                                `title`,
+                                `uploaderId`
+                            )
+                        VALUES (
+                            '{$username}',
+                            '{$this->getUserID($username)}'
+                        );";
+            return $this->connection->query($qr);
+        }
+
+        public function deleteNote($noteId)
+        {
+            $qr = "DELETE FROM 
+                            `notes`
+                        WHERE
+                            `id` = {$noteId};";
+            var_dump($qr);
+            return $this->connection->query($qr);
+        }
+
+        public function getNotes()
+        {
+            $ret="";
+            $qr = "SELECT 
+                        *
+                    FROM
+                        `notes`
+                    ";
+
+            $response = $this->connection->query($qr);
+
+            if ($response->num_rows > 0) {
+                $ret = $response->fetch_all(MYSQLI_ASSOC);
+            }
+            return $ret;
         }
     }

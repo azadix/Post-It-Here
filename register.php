@@ -27,7 +27,7 @@
 ?>
 
 <main role="main" clas="container">
-    <div class="card loginForm">
+    <div class="card bg-black-alpha">
         <div class="card-header">
             <h4>Create account</h4>
         </div>
