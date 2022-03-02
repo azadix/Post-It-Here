@@ -6,9 +6,6 @@
         private $pass;
         private $databaseName;
         protected $connection;
-
-        private $title;
-        private $content;
         
         public function __construct ($tempHost = "localhost", $tempLogin="admin", $tempPass = "admin")
         {
@@ -107,7 +104,7 @@
             }
             return $isPasswordMatching;
         }
-        
+
         public function checkIfUsernameAlreadyExists($username)
         {
             $isUsernameAlreadyPresent = false;

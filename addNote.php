@@ -2,4 +2,4 @@
 require "php/DatabaseOperations.php";
 
 $result = $connection->addNote($_COOKIE['username']);
-//header("Location: index.php");
+header("Location: index.php");

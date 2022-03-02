@@ -1,6 +1,5 @@
 <?php
 require "php/DatabaseOperations.php";
 
-$result = $connection->deleteNote($_POST['body']);
-
-//header("Location: index.php");
+$result = $connection->deleteNote($_GET['note']);
+header("Location: index.php");
