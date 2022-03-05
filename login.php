@@ -1,15 +1,16 @@
 <?php
-    require "php/DatabaseOperations.php";
+    require "php/databaseConnection.php";
+    require "php/Class/User.php";
+
     require "templates/top.php";
 
     if (isset($_POST['username']) && isset($_POST['password'])) {
         $userLogin = $_POST['username'];
-        $userPassword =  $_POST['password'];
-        
-        if ($connection->checkIfRegistered($userLogin, $userPassword)) {
-            $expiryDate = time() + 24*60*60*1000;
-            setcookie("isLoggedIn", true, $expiryDate);
-            setcookie("username", $userLogin, $expiryDate);
+        $userPassword = $_POST['password'];
+        $user = new User($connection);
+
+        if ($user->checkIfRegistered($userLogin, $userPassword)) {
+            $_SESSION["user"]= $user->getUserID($userLogin);
             header ("Location: index.php");
         } else {
             echo "<div class='text-danger'>Username or Password is incorrect!</div>";

@@ -1,9 +1,13 @@
 <?php
-    require "php/DatabaseOperations.php";
+    require "php/databaseConnection.php";
+    require "php/Class/User.php";
+    require "php/Class/Note.php";
+
     require "templates/top.php";
 
     $canRegister = true;
-
+    $user = new User($connection);
+    
     if (isset($_POST['password']) && isset($_POST['passwordVerify'])) {
         if ($_POST['password'] !== $_POST['passwordVerify']) {
             echo "<div class='text-danger'>Password and Confirm password should be the same!</div>"; 
@@ -12,7 +16,7 @@
     }
 
     if (isset($_POST['username']) && !empty($_POST['username'])) {
-        if ($connection->checkIfUsernameAlreadyExists($_POST['username'])) {
+        if ($user->checkIfUsernameAlreadyExists($_POST['username'])) {
             echo "<div class='text-danger'>Username already taken!</div>";
             $canRegister = false;
         }
@@ -21,7 +25,7 @@
     if (isset($_POST['username']) && isset($_POST['password']) && isset($_POST['passwordVerify']) && $canRegister == true) {
         $userLogin = $_POST['username'];
         $userPassword =  $_POST['password'];
-        $connection->addNewUser($userLogin, $userPassword);
+        $user->addNewUser($userLogin, $userPassword);
         header ("Location: login.php");
     }
 ?>

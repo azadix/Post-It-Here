@@ -1,16 +1,18 @@
-function deleteNote() {
-    let noteIndex = this.parentNode.firstChild.innerText.replace("#", "");
-    console.log(noteIndex + " has been deleted");
-    fetch('http://localhost/post-it-here/post-it-here/deleteNote.php?note=' + noteIndex);
-}
+$('.container').on('click', '.addNote', function() {
+    $.get('php/addNote.php', function() {
+        //NOTE: not entirely sure why " .container>*" should include the ">*" but it works
+        $('.container').load(location.href + ' .container>*');
+    });
+});
 
-function addNote() {
-    fetch('http://localhost/post-it-here/post-it-here/addNote.php');
-}
+$('.container').on('click', '.deleteNote', function() {
+    let noteIndex = $(this).siblings()[0].innerText.replace("#", "");
+    $.get('php/deleteNote.php?note=' + noteIndex, function() {
+        $('.container').load(location.href + ' .container>*');
+    });
+});
 
-document.querySelectorAll('#deleteNote').forEach(closeButton => {
-    closeButton.addEventListener('click', deleteNote);
-});;
-
-let addNoteButton = document.getElementById('addNote');
-addNoteButton.addEventListener('click', addNote);
+$('.container').on('input', '.noteTitle', function() {
+    let title = $(this).val().trim();
+    console.log(title);
+});
