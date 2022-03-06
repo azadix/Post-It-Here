@@ -9,24 +9,23 @@
 <main role="main" class="container">
     <?php
         echo "<button type='button' class='btn btn-outline-warning m-2 addNote'>Add a new note</button>";
-
         echo "<div class='row'>";
 
         $noteObject = new Note($connection);
-        $allNotes = $noteObject->getNotes();
+        $allNotes = array_reverse($noteObject->getNotes());
 
         foreach ($allNotes as $oneNote) {
             $author = new User($connection);
             $authorName = $author->getUserName($oneNote['uploaderId']);
-
+            
             echo "<div class='col-lg-4 col-md-12 p-2 text-black noteContainer'>";
                 echo "<div class='card p-1 h-100 note'>";
                     echo "<div class='card-header bg-yellow bold'>";
                         echo "<div class='input-group'>";
                             echo "<div class='input-group-prepend bg-yellow'>
-                                    <div class='input-group-text border-dark bg-black-alpha'>#{$oneNote['id']}</div>
+                                    <div class='input-group-text border-dark bg-black-alpha noteIndex'>#{$oneNote['id']}</div>
                                 </div>";
-                            echo "<input type='text' class='form-control border-dark bg-yellow noteTitle' value=''></input>";
+                            echo "<input type='text' class='form-control border-dark bg-yellow noteTitle' value='{$oneNote['title']}'></input>";
                             echo "<button type='button' class='btn-close px-2 deleteNote' alt='Delete Note'></button>";
                         echo "</div>";
                         echo "<pre class='m-0'>Author: {$authorName}</pre>";
@@ -50,7 +49,6 @@
             echo "</div>";
         }
         echo "</div>";
-
     ?>
 </main>
     <script src="js/script.js"></script>

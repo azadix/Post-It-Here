@@ -4,4 +4,4 @@
     require "Class/Note.php";
 
     $note = new Note($connection);
-    $note->deleteNote($_POST['id']);
+    $note->updateTitle($_POST['id'], $_POST['title']);

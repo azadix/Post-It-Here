@@ -32,10 +32,10 @@
 
         public function updateTitle($noteId, $title)
         {
-            $qr = "UPDATE 
+            $qr = "UPDATE
                         `notes`
                     SET
-                        `title` = {$title}
+                        `title` = '{$title}'
                     WHERE
                         `id` = {$noteId}
                     ";
