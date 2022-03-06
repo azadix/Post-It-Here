@@ -8,11 +8,10 @@
             $this->connection = $tempConnection;
         }
         
-        public function addNote($userId)
+        public function addContainer($userId)
         {
-            
             $qr = "INSERT INTO 
-                            `notes` (
+                            `containers` (
                                 `uploaderId`
                             )
                         VALUES (
@@ -21,42 +20,83 @@
             return $this->connection->query($qr);
         }
 
-        public function deleteNote($noteId)
+        public function deleteContainer($containerId)
         {
             $qr = "DELETE FROM 
-                            `notes`
+                            `containers`
                         WHERE
-                            `id` = {$noteId};";
+                            `id` = {$containerId};";
             return $this->connection->query($qr);
         }
 
-        public function updateTitle($noteId, $title)
+        public function updateContainerTitle($containerId, $title)
         {
             $qr = "UPDATE
-                        `notes`
+                        `containers`
                     SET
                         `title` = '{$title}'
                     WHERE
-                        `id` = {$noteId}
-                    ";
+                        `id` = {$containerId}";
 
             return $this->connection->query($qr);
         }
 
-        public function getNotes()
+        public function getContainers()
         {
             $ret=[];
             $qr = "SELECT 
                         *
                     FROM
-                        `notes`
-                    ";
+                        `containers`";
 
             $response = $this->connection->query($qr);
+            
             if ($response->num_rows > 0) {
                 $ret = $response->fetch_all(MYSQLI_ASSOC);
             }
             return $ret;
+        }
+
+        public function addNote($containerId, $noteOrder)
+        {
+            $qr = "INSERT INTO 
+                            `notes` (
+                                `containerId`,
+                                `order`
+                            )
+                        VALUES (
+                            '{$containerId}',
+                            '{$noteOrder}'
+                        );";
+            return $this->connection->query($qr);
+        }
+
+        public function updateNoteContent($containerId, $noteId, $content)
+        {
+            $qr = "UPDATE
+                        `notes`
+                    SET
+                        `content` = '{$content}'
+                    WHERE
+                        `id` = {$noteId}
+                    AND
+                        `containerId` = {$containerId}";
+
+            return $this->connection->query($qr);
+        }
+
+        public function updateNoteStatus($containerId, $noteId, $isChecked)
+        {
+            $qr = "UPDATE
+                        `notes`
+                    SET
+                        `isChecked` = '{$isChecked}'
+                    WHERE
+                        `id` = {$noteId}
+                    AND
+                        `containerId` = {$containerId}";
+
+            return $this->connection->query($qr);
         }
     }
     

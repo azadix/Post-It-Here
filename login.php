@@ -11,7 +11,7 @@
 
         if ($user->checkIfRegistered($userLogin, $userPassword)) {
             $_SESSION["user"]= $user->getUserID($userLogin);
-            header ("Location: index.php");
+            Header('Location: index.php');
         } else {
             echo "<div class='text-danger'>Username or Password is incorrect!</div>";
         }

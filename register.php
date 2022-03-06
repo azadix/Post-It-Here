@@ -6,27 +6,49 @@
     require "templates/top.php";
 
     $canRegister = true;
-    $user = new User($connection);
-    
-    if (isset($_POST['password']) && isset($_POST['passwordVerify'])) {
-        if ($_POST['password'] !== $_POST['passwordVerify']) {
-            echo "<div class='text-danger'>Password and Confirm password should be the same!</div>"; 
-            $canRegister = false;  
-        }
-    }
+    $passwordLength = 5;
+    $userLogin="";
+    $userPassword="";
+    $userPasswordConfirm="";
 
-    if (isset($_POST['username']) && !empty($_POST['username'])) {
-        if ($user->checkIfUsernameAlreadyExists($_POST['username'])) {
+    $user = new User($connection);
+
+    //Check if post values are supplied
+    if (isset($_POST['username'])){
+        $userLogin = $_POST['username'];
+        
+        //Check if username is supplied and doesn't already exist
+        if (empty($userLogin)) {
+            echo "<div class='text-danger'>Username must be supplied!</div>";
+            $canRegister = false;
+        }
+        if ($user->checkIfUsernameAlreadyExists($userLogin)) {
             echo "<div class='text-danger'>Username already taken!</div>";
             $canRegister = false;
         }
     }
-    
-    if (isset($_POST['username']) && isset($_POST['password']) && isset($_POST['passwordVerify']) && $canRegister == true) {
-        $userLogin = $_POST['username'];
-        $userPassword =  $_POST['password'];
+
+    if (isset($_POST['password']) && isset($_POST['passwordConfirm'])){
+        $userPassword = $_POST['password'];
+        $userPasswordConfirm = $_POST['passwordConfirm'];
+        
+        //Check if passwords are matching
+        if ($userPassword !== $userPasswordConfirm) {
+            echo "<div class='text-danger'>Password and Confirm password should be the same!</div>"; 
+            $canRegister = false;  
+        }
+        
+        //Check if passwords are of required lenght
+        if (strlen($userPassword) < $passwordLength) {
+            echo "<div class='text-danger'>Password must be longer than {$passwordLength} characters!</div>"; 
+            $canRegister = false;  
+        }
+    }
+
+    //TODO: browser sees the payload for form data in plaintext. Figure out how to get rid of that when switching location
+    if ($canRegister == true && isset($_POST['username']) && isset($_POST['password']) && isset($_POST['passwordConfirm']) ) {
         $user->addNewUser($userLogin, $userPassword);
-        header ("Location: login.php");
+        Header('Location: login.php');
     }
 ?>
 
@@ -38,7 +60,7 @@
         <div class="card-body">
             <form action="register.php" method="POST">
                 <div class="form-group p-2">
-                    <label for="ssername">Username:</label>
+                    <label for="username">Username:</label>
                     <input type="text" class="form-control" id="username" name="username" placeholder="Username"></input>
                 </div>
                 <div class="form-group p-2">
@@ -46,8 +68,8 @@
                     <input type="password" class="form-control" id="password" name="password" placeholder="Password" autocomplete="off"></input>
                 </div>
                 <div class="form-group p-2">
-                    <label for="password">Verify password:</label>
-                    <input type="password" class="form-control" id="passwordVerify" name="passwordVerify" placeholder="Verify password" autocomplete="off"></input>
+                    <label for="password">Confirm password:</label>
+                    <input type="password" class="form-control" id="passwordConfirm" name="passwordConfirm" placeholder="Confirm password" autocomplete="off"></input>
                 </div>
                 <div class="form-group p-2">
                     <input type="submit" value="Register" class="btn btn-warning">

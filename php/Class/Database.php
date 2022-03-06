@@ -31,16 +31,16 @@
             return mysqli_query($this->conn, $qr);
         }
         
-        public function createDatabaseIfDoesntExist()
+        public function createDatabase()
         {
             $this->databaseName = "post-it-here";
             $qr = "CREATE DATABASE IF NOT EXISTS `{$this->databaseName}`;";
             return $this->conn->query($qr);
         }
         
-        public function createNotesTableIfDoesntExist()
+        public function createContainersTable()
         {
-            $qr = "CREATE TABLE IF NOT EXISTS `notes` (
+            $qr = "CREATE TABLE IF NOT EXISTS `containers` (
                     `id` INT(8) NOT NULL AUTO_INCREMENT,
                     `title` TEXT(60) NOT NULL,
                     `uploaderId` INT(6) UNSIGNED NOT NULL,
@@ -51,7 +51,21 @@
             return $this->conn->query($qr);
         }
 
-        public function createUsersTableIfDoesntExist()
+        public function createNotesTable()
+        {
+            $qr = "CREATE TABLE IF NOT EXISTS `notes` (
+                    `id` INT(8) NOT NULL AUTO_INCREMENT,
+                    `isChecked` INT(1) NOT NULL,
+                    `content` TEXT(60) NOT NULL,
+                    `order` INT(8) NOT NULL,
+                    `containerId` INT(8) NOT NULL,
+                    PRIMARY KEY (`id`)
+                ) ENGINE = InnoDB;";
+
+            return $this->conn->query($qr);
+        }
+
+        public function createUsersTable()
         {
             $qr = "CREATE TABLE IF NOT EXISTS `users` (
                     `id` INT(8) NOT NULL AUTO_INCREMENT,

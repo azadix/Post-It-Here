@@ -3,7 +3,9 @@
     require "Class/User.php";
     require "Class/Note.php";
 
-    $note = new Note($connection);
-    $note->updateContainerTitle($_POST['id'], $_POST['title']);
-    unset($note);
+    session_start();
+    (isset($_SESSION['user'])) ? $userId=$_SESSION['user'] : $userId=0;
     
+    $note = new Note($connection);
+    $note->addContainer($userId);
+    unset($note);

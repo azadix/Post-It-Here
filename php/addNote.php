@@ -3,9 +3,6 @@
     require "Class/User.php";
     require "Class/Note.php";
 
-    session_start();
-    (isset($_SESSION['user'])) ? $userId=$_SESSION['user'] : $userId=0;
-    
     $note = new Note($connection);
-    $note->addNote($userId);
+    $note->addNote($_POST['containerId'], $_POST['order']);
     unset($note);
