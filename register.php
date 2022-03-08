@@ -45,7 +45,6 @@
         }
     }
 
-    //TODO: browser sees the payload for form data in plaintext. Figure out how to get rid of that when switching location
     if ($canRegister == true && isset($_POST['username']) && isset($_POST['password']) && isset($_POST['passwordConfirm']) ) {
         $user->addNewUser($userLogin, $userPassword);
         Header('Location: login.php');

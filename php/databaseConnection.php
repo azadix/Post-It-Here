@@ -1,5 +1,4 @@
 <?php
-    //define('ROOT_DIR', realpath(__DIR__.'/..'));
     require "Class/Database.php";
     
     global $connection;

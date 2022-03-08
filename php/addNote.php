@@ -4,5 +4,6 @@
     require "Class/Note.php";
 
     $note = new Note($connection);
-    $note->addNote($_POST['containerId'], $_POST['order']);
+    $order = count($note->getNotes($_POST['containerId']));
+    $note->addNote($_POST['containerId'], $order);
     unset($note);

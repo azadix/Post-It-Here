@@ -23,3 +23,11 @@ body {
 .btn-close {
     height: 30px;
 }
+
+.checked {
+    text-decoration: line-through;
+}
+
+.addNote:hover {
+    color: var(--bs-yellow);
+}

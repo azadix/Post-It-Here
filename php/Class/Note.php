@@ -26,6 +26,16 @@
                             `containers`
                         WHERE
                             `id` = {$containerId};";
+            
+            return $this->connection->query($qr);
+        }
+
+        public function deleteAllNotesFromContainer($containerId) {
+            $qr = "DELETE FROM 
+                            `notes`
+                        WHERE
+                            `containerId` = {$containerId};";
+            
             return $this->connection->query($qr);
         }
 
@@ -47,7 +57,7 @@
             $qr = "SELECT 
                         *
                     FROM
-                        `containers`";
+                        `containers`;";
 
             $response = $this->connection->query($qr);
             
@@ -57,7 +67,7 @@
             return $ret;
         }
 
-        public function addNote($containerId, $noteOrder)
+        public function addNote($containerId, $order)
         {
             $qr = "INSERT INTO 
                             `notes` (
@@ -66,11 +76,29 @@
                             )
                         VALUES (
                             '{$containerId}',
-                            '{$noteOrder}'
+                            '{$order}'
                         );";
             return $this->connection->query($qr);
         }
 
+        public function getNotes($containerId)
+        {
+            $ret =[];
+            $qr = "SELECT
+                        *
+                    FROM
+                        `notes`
+                    WHERE
+                        `containerID` = {$containerId};";
+
+            $response = $this->connection->query($qr);
+            
+            if ($response->num_rows > 0) {
+                $ret = $response->fetch_all(MYSQLI_ASSOC);
+            }
+            return $ret;
+        }
+        
         public function updateNoteContent($containerId, $noteId, $content)
         {
             $qr = "UPDATE
@@ -78,7 +106,7 @@
                     SET
                         `content` = '{$content}'
                     WHERE
-                        `id` = {$noteId}
+                        `order` = {$noteId}
                     AND
                         `containerId` = {$containerId}";
 
@@ -92,7 +120,7 @@
                     SET
                         `isChecked` = '{$isChecked}'
                     WHERE
-                        `id` = {$noteId}
+                        `order` = {$noteId}
                     AND
                         `containerId` = {$containerId}";
 

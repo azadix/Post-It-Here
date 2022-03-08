@@ -4,6 +4,6 @@
     require "Class/Note.php";
 
     $note = new Note($connection);
-    $note->deleteContainer($_POST['id']);
-    $note->deleteAllNotesFromContainer($_POST['id']);
+    $note->updateNoteContent($_POST['containerId'], $_POST['id'], $_POST['content']);
     unset($note);
+    

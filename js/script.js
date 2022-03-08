@@ -3,7 +3,7 @@ $.fn.findContainerIndex = function($domElement) {
 };
 
 $.fn.findNoteIndex = function($domElement) {
-    return $domElement.parentsUntil('.input-group').find('.noteIndex').text().replace("#", "");
+    return $domElement.parents('.noteRow').find('.noteIndex').text().replace("#", "");
 };
 
 $.fn.updateTitle = function(containerIndex, title) {
@@ -19,13 +19,27 @@ $.fn.updateTitle = function(containerIndex, title) {
         });
 };
 
-$.fn.updateContent = function(containerIndex, noteIndex, content) {
+$.fn.updateContent = function(noteIndex, containerIndex, content) {
     $.post({
             url: 'php/updateContent.php',
             data: {
                 id: noteIndex,
                 containerId: containerIndex,
                 content: content
+            }
+        })
+        .done(function() {
+            return $(this);
+        });
+};
+
+$.fn.updateStatus = function(noteIndex, containerIndex, status) {
+    $.post({
+            url: 'php/updateCheckbox.php',
+            data: {
+                id: noteIndex,
+                containerId: containerIndex,
+                status: status
             }
         })
         .done(function() {
@@ -62,13 +76,12 @@ $('.container').on('input', '.containerTitle', function() {
     setTimeout($(this).updateTitle(containerIndex, title), 1000);
 });
 
-$('.container').on('click', '.addItem', function() {
+$('.container').on('click', '.addNote', function() {
     let containerIndex = $(this).findContainerIndex($(this))
     $.post({
             url: 'php/addNote.php',
             data: {
-                containerId: containerIndex,
-                noteIndex: noteIndex
+                containerId: containerIndex
             }
         })
         .done(function() {
@@ -76,10 +89,28 @@ $('.container').on('click', '.addItem', function() {
         });
 });
 
-$('.container').on('input', '.noteTitle', function() {
-    let content = $(this).val().trim();
-    let containerIndex = $(this).findContainerIndex($(this));
+$('.container').on('input', '.noteContent', function() {
     let noteIndex = $(this).findNoteIndex($(this));
+    let containerIndex = $(this).findContainerIndex($(this));
+    let content = $(this).val().trim();
 
-    setTimeout($(this).updateContent(containerIndex, noteIndex, content), 1000);
+    setTimeout($(this).updateContent(noteIndex, containerIndex, content), 1000);
+});
+
+$('.container').on('change', ':checkbox', function() {
+    let noteIndex = $(this).findNoteIndex($(this));
+    let containerIndex = $(this).findContainerIndex($(this));
+    let status = 0;
+    let noteContent = $(this).parents('.noteRow').find('.noteContent');
+
+    if ($(this).is(':checked')) {
+        status = 1;
+        noteContent.addClass('checked');
+        noteContent.attr('disabled', true);
+    } else {
+        noteContent.removeClass('checked');
+        noteContent.attr('disabled', false);
+    }
+
+    setTimeout($(this).updateStatus(noteIndex, containerIndex, status), 1000);
 });
