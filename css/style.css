@@ -40,6 +40,5 @@ ul {
 
 .noteContent {
     resize: none;
-    overflow-y: hidden;
     height: auto;
 }
