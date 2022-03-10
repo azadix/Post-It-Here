@@ -1,12 +1,12 @@
-$.fn.findContainerIndex = function($domElement) {
-    return $domElement.parentsUntil('.noteContainer').find('.containerIndex').text().replace("#", "");
+function findContainerIndex(domElement) {
+    return domElement.parentsUntil('.noteContainer').find('.containerIndex').text();
 };
 
-$.fn.findNoteIndex = function($domElement) {
-    return $domElement.parents('.noteRow').find('.noteIndex').text().replace("#", "");
+function findNoteIndex(domElement) {
+    return domElement.parents('.noteRow').find('.noteIndex').text();
 };
 
-$.fn.updateTitle = function(containerIndex, title) {
+function updateTitle(containerIndex, title) {
     $.post({
             url: 'php/updateTitle.php',
             data: {
@@ -15,11 +15,11 @@ $.fn.updateTitle = function(containerIndex, title) {
             }
         })
         .done(function() {
-            return $(this);
+            return true;
         });
 };
 
-$.fn.updateContent = function(noteIndex, containerIndex, content) {
+function updateContent(noteIndex, containerIndex, content) {
     $.post({
             url: 'php/updateContent.php',
             data: {
@@ -29,11 +29,11 @@ $.fn.updateContent = function(noteIndex, containerIndex, content) {
             }
         })
         .done(function() {
-            return $(this);
+            return true;
         });
 };
 
-$.fn.updateStatus = function(noteIndex, containerIndex, status) {
+function updateStatus(noteIndex, containerIndex, status) {
     $.post({
             url: 'php/updateCheckbox.php',
             data: {
@@ -43,74 +43,97 @@ $.fn.updateStatus = function(noteIndex, containerIndex, status) {
             }
         })
         .done(function() {
-            return $(this);
+            return true;
         });
 };
 
-$('.container').on('click', '.deleteContainer', function() {
-    let containerIndex = $(this).findContainerIndex($(this))
-    $.post({
-            url: 'php/deleteContainer.php',
-            data: {
-                id: containerIndex
-            }
-        })
-        .done(function() {
-            $('.container').load(location.href + ' .container>*')
-        });
-});
+function resizeTextareas() {
+    $('textarea').each(function() {
+        $(this).css('height', $(this).prop('scrollHeight') + 'px');
+    }).on("input", function() {
+        $(this).css('height', 'auto;');
+        $(this).css('height', $(this).prop('scrollHeight') + 'px');
+    });
+};
 
-$('.container').on('click', '.addContainer', function() {
-    $.post({
-            url: 'php/addContainer.php',
-        })
-        .done(function() {
-            $('.container').load(location.href + ' .container>*')
-        });
-});
 
-$('.container').on('input', '.containerTitle', function() {
-    let title = $(this).val().trim();
-    let containerIndex = $(this).findContainerIndex($(this));
+$(document).ready(function() {
+    $('.container').on('click', '.deleteContainer', function() {
+        let containerIndex = findContainerIndex($(this))
+        $.post({
+                url: 'php/deleteContainer.php',
+                data: {
+                    id: containerIndex
+                }
+            })
+            .done(function() {
+                $('.container').load(location.href + ' .container>*');
+            });
+    });
 
-    setTimeout($(this).updateTitle(containerIndex, title), 1000);
-});
+    $('.container').on('click', '.addContainer', function() {
+        $.post({
+                url: 'php/addContainer.php',
+            })
+            .done(function() {
+                $('.container').load(location.href + ' .container>*');
+            });
+    });
 
-$('.container').on('click', '.addNote', function() {
-    let containerIndex = $(this).findContainerIndex($(this))
-    $.post({
-            url: 'php/addNote.php',
-            data: {
-                containerId: containerIndex
-            }
-        })
-        .done(function() {
-            $('.container').load(location.href + ' .container>*')
-        });
-});
+    $('.container').on('input', '.containerTitle', function() {
+        let title = $(this).val().trim();
+        let containerIndex = findContainerIndex($(this));
 
-$('.container').on('input', '.noteContent', function() {
-    let noteIndex = $(this).findNoteIndex($(this));
-    let containerIndex = $(this).findContainerIndex($(this));
-    let content = $(this).val().trim();
+        updateTitle(containerIndex, title);
+    });
 
-    setTimeout($(this).updateContent(noteIndex, containerIndex, content), 1000);
-});
+    $('.container').on('click', '.addNote', function() {
+        let containerIndex = findContainerIndex($(this))
+        $.post({
+                url: 'php/addNote.php',
+                data: {
+                    containerId: containerIndex
+                }
+            })
+            .done(function() {
+                $('.container').load(location.href + ' .container>*');
+            });
+    });
 
-$('.container').on('change', ':checkbox', function() {
-    let noteIndex = $(this).findNoteIndex($(this));
-    let containerIndex = $(this).findContainerIndex($(this));
-    let status = 0;
-    let noteContent = $(this).parents('.noteRow').find('.noteContent');
+    $('.container').on('input', '.noteContent', function() {
+        let noteIndex = findNoteIndex($(this));
+        let containerIndex = findContainerIndex($(this));
+        let content = $(this).val().trim();
 
-    if ($(this).is(':checked')) {
-        status = 1;
-        noteContent.addClass('checked');
-        noteContent.attr('disabled', true);
-    } else {
-        noteContent.removeClass('checked');
-        noteContent.attr('disabled', false);
-    }
+        updateContent(noteIndex, containerIndex, content);
+    });
 
-    setTimeout($(this).updateStatus(noteIndex, containerIndex, status), 1000);
+    $('.container').on('change', ':checkbox', function() {
+        let noteIndex = findNoteIndex($(this));
+        let containerIndex = findContainerIndex($(this));
+        let status = 0;
+        let noteContent = $(this).parents('.noteRow').find('.noteContent');
+
+        if ($(this).is(':checked')) {
+            status = 1;
+            noteContent.addClass('checked');
+            noteContent.attr('disabled', true);
+        } else {
+            noteContent.removeClass('checked');
+            noteContent.attr('disabled', false);
+        }
+
+        updateStatus(noteIndex, containerIndex, status);
+    });
+
+    resizeTextareas();
+
+    // $(".sortable").sortable();
+    // $('.sortable').on('sortstop', function() {
+    //     let containerIndex = $(this).findContainerIndex($(this));
+    //     $('.sortable').each(function() {
+    //         let noteIndex = $(this).findNoteIndex($(this));
+    //         $(this).updateOrder(noteIndex, containerIndex);
+    //     })
+    // })
 });

@@ -89,7 +89,9 @@
                     FROM
                         `notes`
                     WHERE
-                        `containerID` = {$containerId};";
+                        `containerID` = {$containerId}
+                    ORDER BY
+                        `order` DESC";
 
             $response = $this->connection->query($qr);
             

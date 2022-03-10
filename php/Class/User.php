@@ -57,7 +57,7 @@
 
             if ($response->num_rows > 0) {
                 $row = $response->fetch_assoc();
-                if ($username ==  $row["username"]) {
+                if ($username == $row["username"]) {
                     $isUsernameAlreadyPresent = true;
                 }
             }
